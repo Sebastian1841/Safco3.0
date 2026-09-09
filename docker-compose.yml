@@ -1,0 +1,64 @@
+services:
+  # API Flask
+  backend:
+    build: ./Backend
+    ports:
+      - "8081:5000"
+    restart: on-failure
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://safcouser:safcopassword@db:5432/safcodb
+      THINGSBOARD_HOST: https://sinergychile.cl
+      PYTHONUNBUFFERED: "1"
+
+  # Sincronizador GpsGate
+  gpsgate_sync:
+    build: ./Backend
+    command:
+      - python
+      - -u
+      - gpsgate_sync_worker.py
+      - --intervalo
+      - "60"
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://safcouser:safcopassword@db:5432/safcodb
+      THINGSBOARD_HOST: https://sinergychile.cl
+      GPSGATE_SYNC_INTERVAL: "60"
+      PYTHONUNBUFFERED: "1"
+
+  # Frontend
+  frontend:
+    build: ./frontend
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+    environment:
+      VUE_APP_BACKEND_URL: http://181.212.203.202:8081
+
+  # PostgreSQL
+  db:
+    image: postgres:14-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: safcouser
+      POSTGRES_PASSWORD: safcopassword
+      POSTGRES_DB: safcodb
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - pg_isready -U safcouser -d safcodb
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  pgdata:

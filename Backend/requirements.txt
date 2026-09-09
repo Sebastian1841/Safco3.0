@@ -1,0 +1,7 @@
+# En tu archivo requirements.txt
+flask
+flask_cors
+requests
+psycopg2-binary
+Flask-SQLAlchemy  
+pdfplumber

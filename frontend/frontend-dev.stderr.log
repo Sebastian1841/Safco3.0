@@ -1,0 +1,7 @@
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+Browserslist: browsers data (caniuse-lite) is 10 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[1m[33m[@vue/compiler-sfc][0m[33m `defineProps` is a compiler macro and no longer needs to be imported.[0m
+
+[BABEL] Note: The code generator has deoptimised the styling of C:\Users\suazo\OneDrive\Escritorio\Safco-main (1)\Safco-main\frontend\node_modules\exceljs\dist\exceljs.min.js as it exceeds the max of 500KB.
